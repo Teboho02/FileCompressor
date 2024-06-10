@@ -7,43 +7,30 @@ export default function Home() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [imageWidthPercentage, setImageWidthPercentage] = useState<number>(100);
   const [compressedImage, setCompressedImage] = useState<string | null>(null);
-  //use 100 clusters as default
   const [level, setLevel] = useState<number>(100);
 
   const handleImageUpload = (event: ChangeEvent<HTMLInputElement>): void => {
     if (event.target.files && event.target.files[0]) {
       const imageUrl = URL.createObjectURL(event.target.files[0]);
-      console.log("type imgage ",typeof imageUrl);
       setSelectedImage(imageUrl);
       setCompressedImage(null); 
     }
   };
 
   const handleWidthChange = (percentage: number): void => {
-    setLevel(percentage);
+    setImageWidthPercentage(percentage);
   };
 
-  const SetLevel = (level : number): void =>{
+  const handleLevelChange = (level: number): void => {
     setLevel(level);
-  }
-
-  const downloadCompressedImage =(image : string) =>{
-    const imageElement = new window.Image();
-    imageElement.src = image;
-
-    return imageElement.src;
-
-  }
-
-
-  
+  };
 
   const handleCompress = (): void => {
     if (selectedImage) {
       const imageElement = new window.Image();
       imageElement.src = selectedImage;
       imageElement.onload = () => {
-        const compressor = new ImageCompressor(imageElement, level * 10000); // Set k value for K-means
+        const compressor = new ImageCompressor(imageElement, level); // Set k value for K-means
         const compressed = compressor.compress();
         setCompressedImage(compressed.src);
       };
@@ -69,7 +56,7 @@ export default function Home() {
             <Image
               src={selectedImage}
               alt="Selected"
-              width={500}
+              width={500 * (imageWidthPercentage / 100)}
               height={500}
               className="object-cover rounded-lg"
             />
@@ -87,12 +74,12 @@ export default function Home() {
               className="object-cover rounded-lg"
             />
 
-<a
+            <a
               href={compressedImage}
               download="compressed_image.png"
               className="mt-6 px-4 py-2 rounded-lg font-semibold bg-blue-600 text-white hover:bg-blue-500 transition"
             >
-              Download image
+              Download Image
             </a>
           </div>
         )}
@@ -102,7 +89,7 @@ export default function Home() {
         {[25, 50, 75, 85, 95].map((percentage) => (
           <button
             key={percentage}
-            onClick={() => handleWidthChange(percentage)}
+            onClick={() => handleLevelChange(percentage)}
             className={`px-4 py-2 rounded-lg font-semibold transition ${
               level === percentage
                 ? 'bg-blue-600 text-white'
