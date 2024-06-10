@@ -1,4 +1,4 @@
-class ImageCompressor {
+export default class ImageCompressor {
     private image: HTMLImageElement;
     private canvas: HTMLCanvasElement;
     private ctx: CanvasRenderingContext2D;
