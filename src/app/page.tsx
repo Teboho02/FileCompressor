@@ -99,7 +99,7 @@ export default function Home() {
       </div>
 
       <div className="mt-6 bg-gray-800 p-4 rounded-lg shadow-lg w-full max-w-md flex justify-around">
-        {[25, 50, 75, 85].map((percentage) => (
+        {[25, 50, 75, 85, 95].map((percentage) => (
           <button
             key={percentage}
             onClick={() => handleWidthChange(percentage)}
